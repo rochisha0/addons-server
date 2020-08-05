@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import hashlib
 import itertools
 import os
 import re
@@ -2174,3 +2175,7 @@ class AddonGUID(ModelBase):
 
     class Meta:
         db_table = 'addons_reusedguid'
+
+    def save(self, *args, **kwargs):
+        self.hashed_guid = hashlib.sha256(self.guid.encode()).hexdigest()
+        super().save(*args, **kwargs)
